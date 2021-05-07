@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart' as http;
-// json 파싱을 위해
-import 'dart:convert';
+
+import 'package:weather_app/data/my_location.dart';
+import 'package:weather_app/data/network.dart';
+import 'package:weather_app/screens/weather_screen.dart';
+
+// https://openweathermap.org/
+const apikey = '718fc9176c8b844ffce641eaafc01955';
 
 class Loading extends StatefulWidget {
   @override
@@ -10,42 +13,51 @@ class Loading extends StatefulWidget {
 }
 
 class _LoadingState extends State<Loading> {
+  // 위도와 경도
+  double latitude3;
+  double longitude3;
+
   //생성되는 순간 딱 한 번만 호출됨
   @override
   void initState() {
     super.initState();
     getLocation();
-    fetchData();
   }
 
   void getLocation() async {
-    try {
-      //위치의 정확도 정도
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      print(position);
-    } catch (e) {
-      print('문제가 발생했습니다.');
-    }
+    MyLocation myLocation = MyLocation();
+    await myLocation.getMyCurrentLocation();
+    latitude3 = myLocation.latitude2;
+    longitude3 = myLocation.longitude2;
+    print('$latitude3, $longitude3');
+
+    Network network = Network(
+        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longitude3&appid=$apikey&units=metric');
+
+    var weatherData = await network.getJsonData();
+    print(weatherData);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WeatherScreen(
+                  parseWeatherData: weatherData,
+                )));
   }
 
   // key값과 value값이 각각 매칭되는 것을 JSON format이라고 함
 
-  void fetchData() async {
-    // Uri는 Url의 한 종류라고 할 수 있음
-    var url = Uri.parse(
-        'https://samples.openweathermap.org/data/2.5/weather?q=London&appid=b1b15e88fa797225412429c1c50c122a1');
-    http.Response response = await http.get(url);
-    // response.statusCode는 상태를 코드로 가져옴(Ex. 404, 200 ...)
-    if (response.statusCode == 200) {
-      // response.body는 본문 전체를 가져오기
-      String jsonData = response.body;
-      var myjson = jsonDecode(jsonData)['weather'][0]['description'];
-      var wind = jsonDecode(jsonData)['wind']['speed'];
-      var id = jsonDecode(jsonData)['id'];
-      print('$myjson, $wind, $id');
-    }
-  }
+  // void fetchData() async {
+
+  //     var myjson = parsingData['weather'][0]['description'];
+  //     var wind = parsingData['wind']['speed'];
+  //     var id = parsingData['id'];
+  //     print('$myjson, $wind, $id');
+  //   }
+  //   // 정상이 아닐 경우
+  //   else {
+  //     print(response.statusCode);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
