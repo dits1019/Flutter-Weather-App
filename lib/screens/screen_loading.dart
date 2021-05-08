@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:weather_app/data/my_location.dart';
 import 'package:weather_app/data/network.dart';
-import 'package:weather_app/screens/weather_screen.dart';
+import 'package:weather_app/screens/screen_weather.dart';
 
 // https://openweathermap.org/
 const apikey = '718fc9176c8b844ffce641eaafc01955';
@@ -32,7 +32,7 @@ class _LoadingState extends State<Loading> {
     print('$latitude3, $longitude3');
 
     Network network = Network(
-        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longitude3&appid=$apikey&units=metric');
+        'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longitude3&appid=$apikey&units=metric&lang=kr');
 
     var weatherData = await network.getJsonData();
     print(weatherData);
@@ -62,12 +62,7 @@ class _LoadingState extends State<Loading> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {},
-          child: Text('Get my location'),
-        ),
-      ),
+      body: Center(child: CircularProgressIndicator()),
     );
   }
 }
