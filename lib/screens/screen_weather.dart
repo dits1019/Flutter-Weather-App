@@ -15,7 +15,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   int temp;
   var wind;
   // var weather;
-  // dynamic detail_weather;
+  String detail_weather;
 
   @override
   void initState() {
@@ -27,8 +27,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
     cityName = weatherData['name'];
     var temp2 = weatherData['main']['temp'];
     wind = weatherData['wind']['speed'];
-    // weather = weatherData['weather']['main'];
-    // detail_weather = weatherData['weather']['description'];
+    // weather = weatherData['weather'][0]['main'];
+    detail_weather = weatherData['weather'][0]['description'];
 
     // round = 소수점 반올림
     temp = temp2.round();
@@ -54,17 +54,26 @@ class _WeatherScreenState extends State<WeatherScreen> {
               Align(
                 alignment: Alignment.center,
                 child: Padding(
-                  padding: const EdgeInsets.only(bottom: 300),
-                  child: weather_view(FontAwesomeIcons.temperatureHigh,
-                      '${temp.toString()}°C', 10),
+                  padding: const EdgeInsets.only(bottom: 250),
+                  child: weather_view(
+                      FontAwesomeIcons.temperatureHigh, '${temp.toString()}°C'),
                 ),
               ),
               Align(
                   alignment: Alignment.center,
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 100),
-                    child: weather_view(
-                        FontAwesomeIcons.wind, wind.toString(), 20),
+                    child: weather_view(FontAwesomeIcons.wind, wind.toString()),
+                  )),
+              Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 100),
+                    child: Text(
+                      detail_weather,
+                      style:
+                          TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                    ),
                   )),
               Align(
                 alignment: Alignment.bottomCenter,
@@ -81,7 +90,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
     );
   }
 
-  Widget weather_view(icon, String text, double margin) {
+  Widget weather_view(icon, String text) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -92,7 +101,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
           ),
         ),
         SizedBox(
-          width: margin,
+          width: 20,
         ),
         Text(
           text,
