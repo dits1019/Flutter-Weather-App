@@ -43,7 +43,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: dayornight ? Colors.black38 : Colors.blue[50],
+        backgroundColor: dayornight ? Colors.lightBlue[900] : Colors.blue[50],
         body: Center(
           child: Stack(
             children: [
@@ -78,8 +78,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     padding: const EdgeInsets.only(top: 100),
                     child: Text(
                       detail_weather,
-                      style:
-                          TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
+                          color: dayornight ? Colors.white : Colors.black),
                     ),
                   )),
               Align(
