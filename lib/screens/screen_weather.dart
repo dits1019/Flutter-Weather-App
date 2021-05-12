@@ -1,10 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+// 낮과 밤에 따라 배경 변경
+var _now = DateTime.now().hour;
+var dayornight = _now >= 18 ? true : false;
+
 class WeatherScreen extends StatefulWidget {
   final dynamic parseWeatherData;
+  final dynamic weatherDataList;
 
-  WeatherScreen({this.parseWeatherData});
+  WeatherScreen({this.parseWeatherData, this.weatherDataList});
 
   @override
   _WeatherScreenState createState() => _WeatherScreenState();
@@ -14,20 +21,18 @@ class _WeatherScreenState extends State<WeatherScreen> {
   var cityName;
   int temp;
   var wind;
-  // var weather;
   String detail_weather;
 
   @override
   void initState() {
     super.initState();
-    updateData(widget.parseWeatherData);
+    updateData(widget.parseWeatherData, widget.weatherDataList);
   }
 
-  void updateData(dynamic weatherData) {
+  void updateData(dynamic weatherData, dynamic weatherDataList) {
     cityName = weatherData['name'];
     var temp2 = weatherData['main']['temp'];
     wind = weatherData['wind']['speed'];
-    // weather = weatherData['weather'][0]['main'];
     detail_weather = weatherData['weather'][0]['description'];
 
     // round = 소수점 반올림
@@ -38,7 +43,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.blue[50],
+        backgroundColor: dayornight ? Colors.black38 : Colors.blue[50],
         body: Center(
           child: Stack(
             children: [
@@ -47,8 +52,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 100, bottom: 60),
                   child: Text(cityName,
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: dayornight ? Colors.white : Colors.black)),
                 ),
               ),
               Align(
@@ -82,7 +89,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   child: Image.network(
                       'https://cdn.pixabay.com/photo/2018/12/10/16/22/city-3867295_1280.png'),
                 ),
-              )
+              ),
+              // ListView.builder(
+              //     itemBuilder: (BuildContext context, int index) {})
             ],
           ),
         ),
@@ -98,6 +107,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
           child: FaIcon(
             icon,
             size: 50,
+            color: dayornight ? Colors.white : Colors.black,
           ),
         ),
         SizedBox(
@@ -105,7 +115,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
         ),
         Text(
           text,
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: dayornight ? Colors.white : Colors.black),
         ),
       ],
     );

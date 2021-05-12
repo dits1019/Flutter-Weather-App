@@ -34,13 +34,17 @@ class _LoadingState extends State<Loading> {
     Network network = Network(
         'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longitude3&appid=$apikey&units=metric&lang=kr');
 
+    Network _network = Network(
+        'https://api.openweathermap.org/data/2.5/forecast?lat=$latitude3&lon=$longitude3&cnt=5&appid=$apikey&units=metric&lang=kr');
+
     var weatherData = await network.getJsonData();
-    print(weatherData);
+    var weatherDataList = await _network.getJsonData();
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => WeatherScreen(
                   parseWeatherData: weatherData,
+                  weatherDataList: weatherDataList,
                 )));
   }
 
