@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -76,8 +77,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   alignment: Alignment.center,
                   child: Padding(
                     padding: const EdgeInsets.only(top: 100),
-                    child: Text(
+                    child: AutoSizeText(
                       detail_weather,
+                      maxLines: 2,
+                      maxFontSize: 35,
                       style: TextStyle(
                           fontSize: 50,
                           fontWeight: FontWeight.bold,
@@ -88,8 +91,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                 alignment: Alignment.bottomCenter,
                 child: Container(
                   width: double.infinity,
-                  child: Image.network(
-                      'https://cdn.pixabay.com/photo/2018/12/10/16/22/city-3867295_1280.png'),
+                  child: Image.asset('images/city.png'),
                 ),
               ),
               // ListView.builder(

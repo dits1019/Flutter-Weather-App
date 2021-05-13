@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:weather_app/data/my_location.dart';
 import 'package:weather_app/data/network.dart';
@@ -65,8 +66,13 @@ class _LoadingState extends State<Loading> {
 
   @override
   Widget build(BuildContext context) {
+    // 낮과 밤에 따라 배경 변경
+    var _now = DateTime.now().hour;
+    var dayornight = _now >= 18 ? true : false;
+
     return Scaffold(
-      body: Center(child: CircularProgressIndicator()),
+      backgroundColor: dayornight ? Colors.lightBlue[900] : Colors.blue[50],
+      body: Center(child: Lottie.asset('images/loading.json')),
     );
   }
 }
