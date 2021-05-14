@@ -36,7 +36,7 @@ class _LoadingState extends State<Loading> {
         'https://api.openweathermap.org/data/2.5/weather?lat=$latitude3&lon=$longitude3&appid=$apikey&units=metric&lang=kr');
 
     Network _network = Network(
-        'https://api.openweathermap.org/data/2.5/forecast?lat=$latitude3&lon=$longitude3&cnt=5&appid=$apikey&units=metric&lang=kr');
+        'https://api.openweathermap.org/data/2.5/forecast?lat=$latitude3&lon=$longitude3&cnt=3&appid=$apikey&units=metric&lang=kr');
 
     var weatherData = await network.getJsonData();
     var weatherDataList = await _network.getJsonData();
