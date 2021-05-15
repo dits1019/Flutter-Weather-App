@@ -3,14 +3,12 @@ import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 // 낮과 밤에 따라 배경 변경
-var _now = DateTime.now().hour;
-var dayornight = _now >= 18 ? true : false;
-
-// var _nowYear = DateTime.now().year;
-// var _nowMonth = DateTime.now().month;
-// var _nowDay = DateTime.now().day;
+var _now = DateTime.now();
+var _nowHour = _now.hour;
+var dayornight = _nowHour >= 18 ? true : false;
 
 class WeatherScreen extends StatefulWidget {
   final dynamic parseWeatherData;
@@ -39,7 +37,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
   void initState() {
     super.initState();
     updateData(widget.parseWeatherData, widget.weatherDataList);
-    // print(_nowDay);
   }
 
   void updateData(dynamic weatherData, dynamic weatherDataList) {
@@ -84,35 +81,27 @@ class _WeatherScreenState extends State<WeatherScreen> {
         body: Center(
           child: Stack(
             children: [
-              Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 100, bottom: 60),
-                  child: Text(cityName,
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: dayornight ? Colors.white : Colors.black)),
-                ),
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 250),
-                  child: weather_view(
-                      FontAwesomeIcons.temperatureHigh, '${temp.toString()}°C'),
-                ),
-              ),
-              Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 100),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 130, bottom: 60),
+                    child: Text(cityName,
+                        style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: dayornight ? Colors.white : Colors.black)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: weather_view(FontAwesomeIcons.temperatureHigh,
+                        '${temp.toString()}°C'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 60),
                     child: weather_view(FontAwesomeIcons.wind, wind.toString()),
-                  )),
-              Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 100),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(),
                     child: AutoSizeText(
                       detail_weather,
                       maxLines: 2,
@@ -122,7 +111,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
                           fontWeight: FontWeight.bold,
                           color: dayornight ? Colors.white : Colors.black),
                     ),
-                  )),
+                  )
+                ],
+              ),
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
@@ -141,17 +132,19 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       shrinkWrap: true,
                       itemCount: 3,
                       itemBuilder: (BuildContext context, int index) {
+                        // 현재 날짜에 하루씩 추가
+                        var _futureDate = _now.add(Duration(days: index + 1));
                         return Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                           ),
-                          width: 150,
-                          margin: EdgeInsets.only(left: 30, right: 30),
+                          width: 170,
+                          margin: EdgeInsets.only(left: 20, right: 20),
                           child: Column(
                             children: [
                               Padding(
-                                padding: const EdgeInsets.only(top: 10),
+                                padding: const EdgeInsets.only(top: 20),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -196,7 +189,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                   maxLines: 2,
                                   maxFontSize: 30,
-                                  minFontSize: 23,
+                                  minFontSize: 26,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 70),
+                                child: Text(
+                                  DateFormat('yyyy-MM-dd').format(_futureDate),
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 16),
                                 ),
                               ),
                             ],
