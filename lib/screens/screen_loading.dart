@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:weather_app/data/my_location.dart';
 import 'package:weather_app/data/network.dart';
 import 'package:weather_app/screens/screen_weather.dart';
+import 'package:flutter/services.dart';
 
 // https://openweathermap.org/
 const apikey = '718fc9176c8b844ffce641eaafc01955';
@@ -40,13 +41,24 @@ class _LoadingState extends State<Loading> {
 
     var weatherData = await network.getJsonData();
     var weatherDataList = await _network.getJsonData();
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => WeatherScreen(
-                  parseWeatherData: weatherData,
-                  weatherDataList: weatherDataList,
-                )));
+    // Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //         builder: (context) => WeatherScreen(
+    //               parseWeatherData: weatherData,
+    //               weatherDataList: weatherDataList,
+    //             )));
+
+    // 이동 후 현제 화면(인트로 화면) 삭제
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+          builder: (BuildContext context) => WeatherScreen(
+                parseWeatherData: weatherData,
+                weatherDataList: weatherDataList,
+              )),
+      (route) => false,
+    );
   }
 
   // key값과 value값이 각각 매칭되는 것을 JSON format이라고 함
@@ -66,6 +78,8 @@ class _LoadingState extends State<Loading> {
 
   @override
   Widget build(BuildContext context) {
+    // 전체화면
+    SystemChrome.setEnabledSystemUIOverlays([]);
     // 낮과 밤에 따라 배경 변경
     var _now = DateTime.now().hour;
     var dayornight = _now >= 18 ? true : false;

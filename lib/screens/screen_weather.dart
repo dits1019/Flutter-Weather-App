@@ -4,6 +4,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
+import 'package:weather_app/screens/screen_loading.dart';
 
 // 낮과 밤에 따라 배경 변경
 var _now = DateTime.now();
@@ -72,6 +74,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // 상태바와 내비게이션바 표시
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+
     TextStyle listTextStyle =
         TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
 
